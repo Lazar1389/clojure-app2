@@ -1,5 +1,6 @@
 (ns clojure-app.core
-  (:require [ring.adapter.jetty :as webserver])
+  (:require [ring.adapter.jetty :as webserver]
+            [ring.middleware.reload :refer [wrap-reload]])
   )
 
 (defn welcome
@@ -8,21 +9,29 @@
   (if (= "/" (:uri request))
     {:status 200
      :body "<h1>Hello, Clojure World</h1>
-            <p>Welcome to your first Clojure app.</p>"
+            <p>Test.</p>"
      :headers {}}
     {:status 404
-     :body "<h1>This is not the page you are looking for</h1>
-            <p>Sorry, the page you requested was not found!></p>"
+     :body "<h1>Nedostupna ruta</h1>
+            <p>></p>"
      :headers {}}))
 
 
-(defn -main
-  "A very simple web server using Ring & Jetty"
+(defn -dev-main
+  "Jednostavna web aplikacija koristi Ring i Jetty, dodat middleware wrap--reload za automatsko prepoznavanje promena u kodu"
   [port-number]
   (webserver/run-jetty
-    welcome
+    (wrap-reload #'welcome)
     {:port  (Integer. port-number)
      :join? false}))
 
-(-main 8000)
+(defn main
+  "Ovde nema automatskog detektovanja promene koda"
+  [port-number]
+  (webserver/run-jetty
+    welcome
+    {:port  (Integer. port-number)}))
 
+
+
+(-dev-main 8000)
