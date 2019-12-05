@@ -35,7 +35,7 @@
     {:port  (Integer. port-number)}))
 
 (defn main
-  "Ovde nema automatskog detektovanja promene koda"
+  "Ovde nema automatskog detektovanja promenee koda"
   [port-number]
   (webserver/run-jetty
     app
