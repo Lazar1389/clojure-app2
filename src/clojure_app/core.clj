@@ -29,13 +29,13 @@
 
 
 (defn -dev-main
-  "Jednostavna web aplikacija koristi Ring i Jetty, dodat middleware wrap--reload za automatsko prepoznavanje promena u kodu"
+  "Jednostavna web aplikacija koristi Ring i Jetty, dodat je middleware wrap- -reload za automatsko prepoznavanje promena u kodu"
   [port-number]
   (webserver/run-jetty (wrap-reload #'app)
     {:port  (Integer. port-number)}))
 
 (defn main
-  "Ovde nema automatskog detektovanja promenee koda"
+  "Ovde nema automatskog detektovanjaa promenee koda"
   [port-number]
   (webserver/run-jetty
     app
