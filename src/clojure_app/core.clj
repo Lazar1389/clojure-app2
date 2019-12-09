@@ -3,6 +3,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :refer [not-found]]
+            [ring.handler.dump :refer [handle-dump]]
 
             )
   )
@@ -12,6 +13,13 @@
   {:status 200
    :headers {}
    :body "<h1>Zbogom</h1>"})
+
+(defn about
+  "Informacije o aplikaciji"
+  [request]
+  {:status 200
+   :headers {}
+   :body "Informacija.."})
 
 (defn welcome
   "A ring handler to process all requests for the web server.  If a request is for something other than then an error message is returned"
@@ -24,6 +32,8 @@
 (defroutes app
            (GET "/" [] welcome)
            (GET "/zbogom" [] goodbye)
+           (GET "/about"   [] about)
+           (GET "/request-info" [] handle-dump)
            (not-found " <h1>greska</h1>")
            )
 
@@ -40,6 +50,10 @@
   (webserver/run-jetty
     app
     {:port  (Integer. port-number)}))
+
+
+
+
 
 
 (-dev-main 8005)
