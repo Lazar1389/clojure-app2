@@ -7,6 +7,9 @@
                  [ring                "1.7.1"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
+                 [org.clojure/java.jdbc "0.7.11" ]
+                 [mysql/mysql-connector-java "8.0.18"]
+                 [com.microsoft.sqlserver/mssql-jdbc "8.1.1.jre13-preview"]
                  ]
   :repl-options {:init-ns clojure-app.core}
 

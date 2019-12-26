@@ -5,6 +5,7 @@
             [compojure.route :refer [not-found]]
             [ring.handler.dump :refer [handle-dump]]
             [clojure-app.rute :refer :all]
+            [clojure.java.jdbc :as jdbc]
             )
   )
 
@@ -35,7 +36,15 @@
 
 
 
+(defn test
+       [port-number]
+       (webserver/run-jetty (wrap-reload #'app)
+                            {:port  (Integer. port-number)})
+
+
+  )
 
 
 
-(-dev-main 8005)
+
+(test 8005)

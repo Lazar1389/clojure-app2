@@ -1,7 +1,8 @@
 (ns clojure-app.rute
-(:require [hiccup.core :refer :all]
-          [hiccup.page :refer :all]
-          )
+  (:require [hiccup.core :refer :all]
+            [hiccup.page :refer :all]
+            [clojure.java.jdbc :as sql]
+            )
 
   )
 
@@ -32,8 +33,23 @@
    :headers {}
    :body "Informacija.."})
 
+(def mysql-db {
+               :subprotocol "mysql"
+               :subname "//localhost/clojure"
+               :user "root"
+               :password "root"})
+
+
+
 (defn welcome
   "Osnovna putanja localhost:8005"
   [request]
   (html [:h1 "Zdravo, Clojure "]
-        [:p "Dobrodosli x"]))
+        [:p "Dobrodosli x"]
+        (sql/query mysql-db
+                   ["SELECT * FROM zaposleni WHERE Ime = ?" "Lazar"]
+                   )))
+
+
+
+
