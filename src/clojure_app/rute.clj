@@ -7,37 +7,37 @@
   )
 
 (defn zbogom
-   "Testiranje ruta, html5 generise celu stranicu "
-   [request]
-   (html5 {:lang "en"}
-          [:head (include-js "myscript.js") (include-css "mystyle.css")]
-          [:body
-           [:div [:h1 {:class "info"} "Heading 1"]]
-           [:div [:p "Paragraf 1"]]
-           [:div [:p "Paragraf 2"]]
-           [:div [:p "Paragraf 3"]]
-           [:div [:p "Paragraf 4"]]]))
+  "Testiranje ruta, html5 generise celu stranicu "
+  [request]
+  (html5 {:lang "en"}
+         [:head (include-js "myscript.js") (include-css "mystyle.css")]
+         [:body
+          [:div [:h1 {:class "info"} "Heading 1"]]
+          [:div [:p "Paragraf 1"]]
+          [:div [:p "Paragraf 2"]]
+          [:div [:p "Paragraf 3"]]
+          [:div [:p "Paragraf 4"]]]))
 
 (defn hello
   "Query string parametri"
   [request]
   (let [name (get-in request [:route-params :name])]
-    {:status 200
-     :body (str "Zdravo " name ".  Iz query stringa")
+    {:status  200
+     :body    (str "Zdravo " name ".  Iz query stringa")
      :headers {}}))
 
 (defn about
   "Informacije o aplikaciji"
   [request]
-  {:status 200
+  {:status  200
    :headers {}
-   :body "Informacija.."})
+   :body    "Informacija.."})
 
 (def mysql-db {
                :subprotocol "mysql"
-               :subname "//localhost/clojure"
-               :user "root"
-               :password "root"})
+               :subname     "//localhost/clojure"
+               :user        "root"
+               :password    "root"})
 
 
 
@@ -52,4 +52,15 @@
 
 
 
+(sql/insert! mysql-db
+             :zaposleni {:Ime "Imee" :Prezime "Prezime" :jmbg "221231"})
+
+
+(sql/delete! mysql-db
+             :zaposleni ["Prezime = ? " "Prezime"])
+
+(sql/update! mysql-db
+             :zaposleni
+             {:ime 40}
+             ["prezime = ? " "Jovic"])
 
