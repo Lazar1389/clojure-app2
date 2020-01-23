@@ -39,8 +39,10 @@
                :user        "root"
                :password    "root"})
 
+(defn save [request]
+  {}
 
-
+  )
 (defn welcome
   "Osnovna putanja localhost:8005"
   [request]

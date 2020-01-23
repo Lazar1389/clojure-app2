@@ -5,11 +5,14 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [ring                "1.7.1"]
+                 [ring/ring-json "0.5.0"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.11" ]
                  [mysql/mysql-connector-java "8.0.18"]
+                 [ring/ring-defaults "0.3.2"]
                  [com.microsoft.sqlserver/mssql-jdbc "8.1.1.jre13-preview"]
+                 [com.h2database/h2 "1.4.193"]
                  ]
   :repl-options {:init-ns clojure-app.core}
 
