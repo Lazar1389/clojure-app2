@@ -14,13 +14,23 @@
 
 
 (defn dodaj-novi
-  [x y z]
-  (let [results (sql/insert! mysql-db :zaposleni {:Ime x :Prezime y :jmbg z}) ]))
+  [x y z c v b]
+  (let [results (sql/insert! mysql-db :regis {:NazivIS x :FazaZivotnogCiklusa y :Oblast z :Tip c :Nosilac v :OperativniSistem b}) ]
+    (assert (= (count results) 1))
+    (first results)
+    ))
 
+
+(defn get-is
+  [is-id]
+  (let [results (sql/query mysql-db
+                            ["select * from regis where id = ?" is-id])]
+    (assert (= (count results) 1))
+    (first results)))
 
 (defn select-all [req]
 (sql/query mysql-db
-           ["SELECT * FROM zaposleni"]
+           ["SELECT * FROM regis"]
            ))
 (comment
 (defn add-location-to-db

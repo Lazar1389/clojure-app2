@@ -11,62 +11,83 @@
    [:title (str "Locations: " title)]
    (page/include-css "/css/styles.css")])
 
-(def header-links
-  [:div#header-links
+(def heder
+  [:div#heder
    "[ "
-   [:a {:href "/"} "Home"]
+   [:a {:href "/pocetna"} "Почетна"]
    " | "
-   [:a {:href "/db/selectall"} "Svi zapisi"]
+   [:a {:href "/db/selectall"} "Сви информациони системи"]
    " | "
-   [:a {:href "/all-locations"} "View All Locations"]
+   [:a {:href "/dodaj-novi"} "Додај нови ИС"]
    " ]"])
 (defn add-location-page
   [req]
   (page/html5
     (gen-page-head "Dodaj novi zapis")
-    header-links
+    heder
     req
 
-    [:h1 "Dodaj novi zapis"]
-    [:form {:action "/add-location" :method "POST"}
+    [:h1 "Додај нови запис"]
+    [:form {:action "/dodaj-novi" :method "POST"}
      (util/anti-forgery-field)
-     [:p "ime value: " [:input {:type "text" :name "ime"}]]
-     [:p "prezime value: " [:input {:type "text" :name "prezime"}]]
-     [:p "jmbg value: " [:input {:type "text" :name "jmbg"}]]
+     [:p "NazivIS value: " [:input {:type "text" :name "NazivIS"}]]
+     [:p "FazaZivotnogCiklusa value: " [:input {:type "text" :name "FazaZivotnogCiklusa"}]]
+     [:p "Oblast value: " [:input {:type "text" :name "Oblast"}]]
+     [:p "Tip value: " [:input {:type "text" :name "Tip"}]]
+     [:p "Nosilac value: " [:input {:type "text" :name "Nosilac"}]]
+     [:p "OperativniSistem value: " [:input {:type "text" :name "OperativniSistem"}]]
+
      [:p [:input {:type "submit" :value "submit location"}]]]))
 
 (defn add-location-results-page
-  [{ :keys [ime prezime jmbg]}]
-  (let [id (db/dodaj-novi ime prezime jmbg)]
+  [{ :keys [NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem]}]
+  (let [id (db/dodaj-novi NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem)]
     (page/html5
-      (gen-page-head "Added a Location")
-      header-links
-      [:h1 "Added a Location"]
-      [:p "Added ["  ime prezime jmbg", "  "] (id: "  ") to the db. "
-       [:a {:href (str "/location/" id)} "See for yourself"]
-       "."])))
+      (gen-page-head "Додата локација")
+      heder
+      [:h1 "Додата локација"]
+      [:p "Успешно додат ИС - "  NazivIS ]
+       [:a {:href (str "/detalji/" (:generated_key id))} "Види детаље"]
+       )))
 
 
 
 
 
-(defn svi-zaposleni
+(defn svi-is
   [req]
   (let [all-rec (db/select-all req)]
     (page/html5
-      (gen-page-head "Svi zaposleni")
-
-      [:h1 "Svi zaposleni"]
+      (gen-page-head "Сви информациони системи")
+      heder
+      [:h1 "Сви информациони системи"]
       [:table
-       [:tr [:th "Ime"] [:th "Prezime"] [:th "jmbg"]]
+       [:tr [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "brisi"]]
        (for [zapis all-rec]
-         [:tr [:td (:ime zapis)] [:td (:prezime zapis)] [:td (:jmbg zapis)]])])))
+         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:href "/detalji/1" } "obrisi"] (:id  zapis)] ])])))
+
+(defn detalji-is
+  [is-id]
+  (let [{nazivIs :nazivis tip :tip faza :fazazivotnogciklusa oblast :oblast nosilac :nosilac opsistem :operativnisistem} (db/get-is is-id)]
+    (page/html5
+      (gen-page-head (str "Location " is-id))
+      heder
+      [:h1 "Информациони систем:"]
+      [:p "Ид: " is-id]
+      [:p "Назив ИС: " nazivIs]
+      [:p "Област: " oblast]
+      [:p "Носилац: " nosilac]
+      [:p "Оперативни систем: " opsistem]
+
+      [:p "Тип: " tip])))
+
+
 
 (defn home-page
   [req]
   (page/html5
     (gen-page-head "Home")
-    header-links
+    heder
     [:h1 "Home"]
     [:p "Webapp to store and display some 2D (x,y) locations."]))
 
@@ -87,8 +108,8 @@
    [:title (str "Locations: " title)]
    (page/include-css "/css/styles.css")])
 
-(def header-links
-  [:div#header-links
+(def heder
+  [:div#heder
    "[ "
    [:a {:href "/"} "Home"]
    " | "
@@ -101,7 +122,7 @@
   []
   (page/html5
     (gen-page-head "Home")
-    header-links
+    heder
     [:h1 "Home"]
     [:p "Webapp to store and display some 2D (x,y) locations."]))
 
@@ -109,7 +130,7 @@
   []
   (page/html5
     (gen-page-head "Add a Location")
-    header-links
+    heder
     [:h1 "Add a Location"]
     [:form {:action "/add-location" :method "POST"}
      (util/anti-forgery-field)                              ; prevents cross-site scripting attacks
@@ -122,7 +143,7 @@
   (let [id (db/add-location-to-db x y)]
     (page/html5
       (gen-page-head "Added a Location")
-      header-links
+      heder
       [:h1 "Added a Location"]
       [:p "Added [" x ", " y "] (id: " id ") to the db. "
        [:a {:href (str "/location/" id)} "See for yourself"]
@@ -133,7 +154,7 @@
   (let [{x :x y :y} (db/get-xy loc-id)]
     (page/html5
       (gen-page-head (str "Location " loc-id))
-      header-links
+      heder
       [:h1 "A Single Location"]
       [:p "id: " loc-id]
       [:p "x: " x]
@@ -144,7 +165,7 @@
   (let [all-locs (db/get-all-locations)]
     (page/html5
       (gen-page-head "All Locations in the db")
-      header-links
+      heder
       [:h1 "All Locations"]
       [:table
        [:tr [:th "id"] [:th "x"] [:th "y"]]

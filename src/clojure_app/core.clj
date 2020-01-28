@@ -19,11 +19,12 @@
 
 
 (defroutes app
+           (GET "/detalji/:is-id" [is-id] (view/detalji-is is-id))
            (GET "/pocetna" req (view/home-page req))
-           (GET "/db/selectall" req (view/svi-zaposleni req))
-           (GET "/add-location" [req]
+           (GET "/db/selectall" req (view/svi-is req))
+           (GET "/dodaj-novi" [req]
              (view/add-location-page req))
-           (POST "/add-location"
+           (POST "/dodaj-novi"
                  {params :params}
              (view/add-location-results-page params))
            (GET "/" req (v/main req))
