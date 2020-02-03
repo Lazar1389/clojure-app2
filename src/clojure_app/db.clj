@@ -32,6 +32,10 @@
 (sql/query mysql-db
            ["SELECT * FROM regis"]
            ))
+
+(defn obrisi [id]
+  (sql/delete! mysql-db
+             :regis ["ID = ?" id]))
 (comment
 (defn add-location-to-db
   [x y]

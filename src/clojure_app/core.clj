@@ -22,11 +22,14 @@
            (GET "/detalji/:is-id" [is-id] (view/detalji-is is-id))
            (GET "/pocetna" req (view/home-page req))
            (GET "/db/selectall" req (view/svi-is req))
+           (GET "/obrisi/:is-id" [is-id] (view/obrisi-zapis is-id))
            (GET "/dodaj-novi" [req]
              (view/add-location-page req))
            (POST "/dodaj-novi"
                  {params :params}
              (view/add-location-results-page params))
+
+
            (GET "/" req (v/main req))
            (GET "/get-form.html" req (v/get-form req))
            (GET "/post-form.html" req (v/post-form req))

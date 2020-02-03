@@ -31,7 +31,11 @@
     [:form {:action "/dodaj-novi" :method "POST"}
      (util/anti-forgery-field)
      [:p "NazivIS value: " [:input {:type "text" :name "NazivIS"}]]
-     [:p "FazaZivotnogCiklusa value: " [:input {:type "text" :name "FazaZivotnogCiklusa"}]]
+     [:p "FazaZivotnogCiklusa value: " [:td  [:select {:name "FazaZivotnogCiklusa"}
+                                              [:option {:value "У развоју"} "У развоју"]
+                                              [:option {:value "У употреби"} "У употреби"]
+                                              [:option {:value "Ван употребе"} "Ван употребе"]
+                                              [:option {:value "Модификација"} "Модификација"]]]]
      [:p "Oblast value: " [:input {:type "text" :name "Oblast"}]]
      [:p "Tip value: " [:input {:type "text" :name "Tip"}]]
      [:p "Nosilac value: " [:input {:type "text" :name "Nosilac"}]]
@@ -50,6 +54,17 @@
        [:a {:href (str "/detalji/" (:generated_key id))} "Види детаље"]
        )))
 
+(defn obrisi-zapis
+  [request]
+(page/html5
+  (gen-page-head "Obrisan zapis")
+  heder
+            (let [x (db/obrisi request)]
+              [:h1 (str "Успешно сте обрисали запис чији је ID: " request) ]
+            )
+  [:a {:href "/db/selectall"} "Повратак на листу ИС"]
+  ) )
+
 
 
 
@@ -62,9 +77,10 @@
       heder
       [:h1 "Сви информациони системи"]
       [:table
-       [:tr [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "brisi"]]
+       [:tr [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "B"] [:th "D"]]
        (for [zapis all-rec]
-         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:href "/detalji/1" } "obrisi"] (:id  zapis)] ])])))
+
+         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:href (str "/detalji/" (:id  zapis)) } "Детаљи"] ] [:td        [:a {:href (str "/obrisi/" (:id  zapis)) } "Обриши запис"] ]  ])])))
 
 (defn detalji-is
   [is-id]
