@@ -20,43 +20,23 @@
 
 (defroutes app
            (GET "/detalji/:is-id" [is-id] (view/detalji-is is-id))
-           (GET "/pocetna" req (view/home-page req))
+           (GET "/pocetna" req (view/pocetna req))
            (GET "/db/selectall" req (view/svi-is req))
            (GET "/obrisi/:is-id" [is-id] (view/obrisi-zapis is-id))
            (GET "/dodaj-novi" [req]
-             (view/add-location-page req))
+             (view/dodaj-novi-view req))
            (POST "/dodaj-novi"
                  {params :params}
-             (view/add-location-results-page params))
-
-
-           (GET "/" req (v/main req))
-           (GET "/get-form.html" req (v/get-form req))
-           (GET "/post-form.html" req (v/post-form req))
-           (GET "/get-submit" req (v/display-result req))
-           (POST "/post-submit" req (v/display-result req))
+             (view/Dodaj-novi-is-rezultat params))
            (GET "/" [] welcome)
            (GET "/zbogom" [] zbogom)
            (GET "/about"   [] about)
-           (GET "/request-info" [] handle-dump)
            (GET "/hello/:name" [] hello)
-           (not-found " <h1>greska</h1>")
+           (not-found "<h1>Грешка</h1>")
 
            )
 
 
-(defn -dev-main
-  "Jednostavna web aplikacija koristi Ring i Jetty, dodat je middleware wrap- -reload za automatsko prepoznavanje promena u kodu"
-  [port-number]
-  (webserver/run-jetty (wrap-reload #'app)
-    {:port  (Integer. port-number)}))
-
-(defn main
-  "Ovde nema automatskog detektovanjaa promenee koda"
-  [port-number]
-  (webserver/run-jetty
-    app
-    {:port  (Integer. port-number)}))
 
 
 
@@ -64,10 +44,7 @@
        [port-number]
   ()
        (webserver/run-jetty (wrap-defaults #'app site-defaults)
-                            {:port  (Integer. port-number)})
-
-
-  )
+                            {:port  (Integer. port-number)}))
 
 
 

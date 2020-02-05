@@ -5,11 +5,18 @@
             [ring.util.anti-forgery :as util]
             )
   )
-(defn gen-page-head
+(defn generisi-head-naslov
   [title]
   [:head
    [:title (str "Locations: " title)]
+   [:link {:rel "stylesheet" :href "/css/styles.css"}]
+   (page/include-js "/js/jquery.js")
+   (page/include-js "/js/bootstrap.js")
+   (page/include-js "/js/test1.js")
+   (page/include-css "/css/bootstrap.css")
    (page/include-css "/css/styles.css")])
+
+
 
 (def heder
   [:div#heder
@@ -20,34 +27,38 @@
    " | "
    [:a {:href "/dodaj-novi"} "Додај нови ИС"]
    " ]"])
-(defn add-location-page
+(defn dodaj-novi-view
   [req]
   (page/html5
-    (gen-page-head "Dodaj novi zapis")
+    (generisi-head-naslov "Додај нови запис")
     heder
     req
 
     [:h1 "Додај нови запис"]
     [:form {:action "/dodaj-novi" :method "POST"}
      (util/anti-forgery-field)
-     [:p "NazivIS value: " [:input {:type "text" :name "NazivIS"}]]
-     [:p "FazaZivotnogCiklusa value: " [:td  [:select {:name "FazaZivotnogCiklusa"}
+     [:p "Назив ИС: " [:input {:type "text" :name "NazivIS"}]]
+     [:p "Фаза животног циклуса: " [:td  [:select {:name "FazaZivotnogCiklusa"}
                                               [:option {:value "У развоју"} "У развоју"]
                                               [:option {:value "У употреби"} "У употреби"]
                                               [:option {:value "Ван употребе"} "Ван употребе"]
                                               [:option {:value "Модификација"} "Модификација"]]]]
-     [:p "Oblast value: " [:input {:type "text" :name "Oblast"}]]
-     [:p "Tip value: " [:input {:type "text" :name "Tip"}]]
-     [:p "Nosilac value: " [:input {:type "text" :name "Nosilac"}]]
-     [:p "OperativniSistem value: " [:input {:type "text" :name "OperativniSistem"}]]
+     [:p "Област: " [:input {:type "text" :name "Oblast"}]]
+     [:p "Тип: " [:input {:type "text" :name "Tip"}]]
+     [:p "Носилац: " [:input {:type "text" :name "Nosilac"}]]
+     [:p "Оперативни систем: " [:td  [:select {:name "OperativniSistem"}
+                                     [:option {:value "Windows XP"} "Windows XP"]
+                                     [:option {:value "Windows 7"} "Windows 7"]
+                                     [:option {:value "Windows 10"} "Windows 10"]
+                                     [:option {:value "Независан од ОП"} "Независан од ОП"]]]]
 
-     [:p [:input {:type "submit" :value "submit location"}]]]))
+     [:p [:input {:type "submit" :value "Додај ИС"}]]]))
 
-(defn add-location-results-page
+(defn Dodaj-novi-is-rezultat
   [{ :keys [NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem]}]
   (let [id (db/dodaj-novi NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem)]
     (page/html5
-      (gen-page-head "Додата локација")
+      (generisi-head-naslov "Додата локација")
       heder
       [:h1 "Додата локација"]
       [:p "Успешно додат ИС - "  NazivIS ]
@@ -57,7 +68,7 @@
 (defn obrisi-zapis
   [request]
 (page/html5
-  (gen-page-head "Obrisan zapis")
+  (generisi-head-naslov "Obrisan zapis")
   heder
             (let [x (db/obrisi request)]
               [:h1 (str "Успешно сте обрисали запис чији је ID: " request) ]
@@ -67,26 +78,25 @@
 
 
 
-
-
 (defn svi-is
   [req]
   (let [all-rec (db/select-all req)]
     (page/html5
-      (gen-page-head "Сви информациони системи")
+      (generisi-head-naslov "Сви информациони системи")
       heder
       [:h1 "Сви информациони системи"]
-      [:table
-       [:tr [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "B"] [:th "D"]]
+      [:table  {:class "table table-striped table-bordered table-hover table-sm"}
+       [:tr  [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "B"] [:th "D"]]
        (for [zapis all-rec]
 
-         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:href (str "/detalji/" (:id  zapis)) } "Детаљи"] ] [:td        [:a {:href (str "/obrisi/" (:id  zapis)) } "Обриши запис"] ]  ])])))
+         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:id "detalji" :class "btn btn-primary":href (str "/detalji/" (:id  zapis)) } "Детаљи"] ] [:td   [:a  {:id "obrisi" :class "btn btn-primary" :href (str "/obrisi/" (:id  zapis)) } "Обриши запис"] ]  ])])))
 
 (defn detalji-is
   [is-id]
   (let [{nazivIs :nazivis tip :tip faza :fazazivotnogciklusa oblast :oblast nosilac :nosilac opsistem :operativnisistem} (db/get-is is-id)]
     (page/html5
-      (gen-page-head (str "Location " is-id))
+      (generisi-head-naslov (str "Location " is-id))
+      (page/include-js "javascript/test1.js")
       heder
       [:h1 "Информациони систем:"]
       [:p "Ид: " is-id]
@@ -99,94 +109,14 @@
 
 
 
-(defn home-page
+(defn pocetna
   [req]
   (page/html5
-    (gen-page-head "Home")
+    (generisi-head-naslov "Почетна")
     heder
-    [:h1 "Home"]
-    [:p "Webapp to store and display some 2D (x,y) locations."]))
+    [:h1 "Добродошли на РЕГИС"]
+    [:p "РЕГИС (регистар информационих система) представља информациони систем у којем се води евиденција о свим ИС који су били или су и даље у употреби"]))
 
 
 
-
-(comment
-
-(ns my-webapp.views
-  (:require [my-webapp.db :as db]
-            [clojure.string :as str]
-            [hiccup.page :as page]
-            [ring.util.anti-forgery :as util]))
-
-(defn gen-page-head
-  [title]
-  [:head
-   [:title (str "Locations: " title)]
-   (page/include-css "/css/styles.css")])
-
-(def heder
-  [:div#heder
-   "[ "
-   [:a {:href "/"} "Home"]
-   " | "
-   [:a {:href "/add-location"} "Add a Location"]
-   " | "
-   [:a {:href "/all-locations"} "View All Locations"]
-   " ]"])
-
-(defn home-page
-  []
-  (page/html5
-    (gen-page-head "Home")
-    heder
-    [:h1 "Home"]
-    [:p "Webapp to store and display some 2D (x,y) locations."]))
-
-(defn add-location-page
-  []
-  (page/html5
-    (gen-page-head "Add a Location")
-    heder
-    [:h1 "Add a Location"]
-    [:form {:action "/add-location" :method "POST"}
-     (util/anti-forgery-field)                              ; prevents cross-site scripting attacks
-     [:p "x value: " [:input {:type "text" :name "x"}]]
-     [:p "y value: " [:input {:type "text" :name "y"}]]
-     [:p [:input {:type "submit" :value "submit location"}]]]))
-
-(defn add-location-results-page
-  [{:keys [x y]}]
-  (let [id (db/add-location-to-db x y)]
-    (page/html5
-      (gen-page-head "Added a Location")
-      heder
-      [:h1 "Added a Location"]
-      [:p "Added [" x ", " y "] (id: " id ") to the db. "
-       [:a {:href (str "/location/" id)} "See for yourself"]
-       "."])))
-
-(defn location-page
-  [loc-id]
-  (let [{x :x y :y} (db/get-xy loc-id)]
-    (page/html5
-      (gen-page-head (str "Location " loc-id))
-      heder
-      [:h1 "A Single Location"]
-      [:p "id: " loc-id]
-      [:p "x: " x]
-      [:p "y: " y])))
-
-(defn all-locations-page
-  []
-  (let [all-locs (db/get-all-locations)]
-    (page/html5
-      (gen-page-head "All Locations in the db")
-      heder
-      [:h1 "All Locations"]
-      [:table
-       [:tr [:th "id"] [:th "x"] [:th "y"]]
-       (for [loc all-locs]
-         [:tr [:td (:id loc)] [:td (:x loc)] [:td (:y loc)]])])))
-
-)
 
