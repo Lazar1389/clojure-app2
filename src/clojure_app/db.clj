@@ -19,6 +19,18 @@
     (assert (= (count results) 1))
     (first results)
     ))
+(defn update-zapis
+  [id x y z c v n]
+  (let [results (sql/update! mysql-db
+                             :regis {:NazivIS x :FazaZivotnogCiklusa y :Oblast z :Tip c :Nosilac v :OperativniSistem n}
+        ["id = ?" id]
+                             )]
+    (assert (= (count results) 1))
+    (first results)
+    )
+
+  )
+
 
 
 (defn get-is

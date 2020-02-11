@@ -25,6 +25,11 @@
            (GET "/obrisi/:is-id" [is-id] (view/obrisi-zapis is-id))
            (GET "/dodaj-novi" [req]
              (view/dodaj-novi-view req))
+           (GET "/updateis/:is-id/:naziv/:faza/:oblast/:tip/:nosilac/:operativnisistem" [] view/update-view
+                                             )
+           (POST "/updatee"
+                 {params :params}
+             (view/update-zapis params))
            (POST "/dodaj-novi"
                  {params :params}
              (view/Dodaj-novi-is-rezultat params))

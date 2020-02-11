@@ -33,7 +33,6 @@
     (generisi-head-naslov "Додај нови запис")
     heder
     req
-
     [:h1 "Додај нови запис"]
     [:form {:action "/dodaj-novi" :method "POST"}
      (util/anti-forgery-field)
@@ -77,6 +76,56 @@
   ) )
 
 
+(defn update-view [request]
+
+  (let [id (get-in request [:route-params :is-id])]
+    (let [naziv (get-in request [:route-params :naziv])]
+
+        (let [oblast (get-in request [:route-params :oblast])]
+          (let [tip (get-in request [:route-params :tip])]
+            (let [nosilac (get-in request [:route-params :nosilac])]
+
+              (page/html5
+    (generisi-head-naslov "Ажурирај запис")
+    heder
+    id
+    [:h1 "Додај нови запис"]
+    [:form {:action "/updatee" :method "POST"}
+     (util/anti-forgery-field)
+     [:p "Назив ИС: " [:input {:type "text" :name "NazivIS" :value naziv}]]
+     [:p "Фаза животног циклуса: " [:td  [:select {:name "FazaZivotnogCiklusa"}
+                                          [:option {:value "У развоју"} "У развоју"]
+                                          [:option {:value "У употреби"} "У употреби"]
+                                          [:option {:value "Ван употребе"} "Ван употребе"]
+                                          [:option {:value "Модификација"} "Модификација"]]]]
+     [:p "Област: " [:input {:type "text" :name "Oblast" :value oblast
+                             } ]]
+     [:p "Тип: " [:input {:type "text" :name "Tip" :value tip}]]
+     [:p "Носилац: " [:input {:type "text" :name "Nosilac" :value nosilac}]]
+     [:p "Оперативни систем: " [:td  [:select {:name "OperativniSistem"}
+                                      [:option {:value "Windows XP"} "Windows XP"]
+                                      [:option {:value "Windows 7"} "Windows 7"]
+                                      [:option {:value "Windows 10"} "Windows 10"]
+                                      [:option {:value "Независан од ОП"} "Независан од ОП"]]]]
+
+     [:p [:input {:type "submit" :value "Додај ИС"}]]]
+    )
+) )
+  ) ) ) )
+
+
+(defn update-zapis
+  [{ :keys [NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem]}]
+  (page/html5
+    (generisi-head-naslov "Update zapis")
+    heder
+    (let [x  (db/update-zapis 37 NazivIS FazaZivotnogCiklusa Oblast Tip Nosilac OperativniSistem)
+          ]
+      [:h1 (str "Успешно сте azurirali запис чији је ID: " NazivIS) ]
+      ) )
+  )
+
+
 
 (defn svi-is
   [req]
@@ -86,10 +135,17 @@
       heder
       [:h1 "Сви информациони системи"]
       [:table  {:class "table table-striped table-bordered table-hover table-sm"}
-       [:tr  [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th "B"] [:th "D"]]
+       [:tr  [:th "Назив ИС"] [:th "Фаза животног циклуса"] [:th "Област"] [:th "Тип"] [:th "Носилац"] [:th "Оперативни систем"] [:th " "] [:th " "] [:th " "]]
        (for [zapis all-rec]
 
-         [:tr [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)] [:td        [:a {:id "detalji" :class "btn btn-primary":href (str "/detalji/" (:id  zapis)) } "Детаљи"] ] [:td   [:a  {:id "obrisi" :class "btn btn-primary" :href (str "/obrisi/" (:id  zapis)) } "Обриши запис"] ]  ])])))
+         [:tr
+          [:td (:nazivis zapis)] [:td (:fazazivotnogciklusa zapis)] [:td (:oblast zapis)] [:td (:tip zapis)] [:td (:nosilac zapis)] [:td (:operativnisistem  zapis)]
+          [:td        [:a {:id "detalji" :class "btn btn-primary":href (str "/detalji/" (:id  zapis)) } "Детаљи"] ]
+          [:td   [:a  {:id "obrisi" :class "btn btn-primary" :href (str "/obrisi/" (:id  zapis)) } "Обриши запис"] ]
+          [:td [:a { :id "azuriraj" :class "btn btn-primary" :href (str "/updateis/" (:id  zapis) "/" (:nazivis zapis) "/" (:fazazivotnogciklusa zapis)
+                                                                        "/"    (:oblast zapis) "/"    (:tip zapis) "/"    (:nosilac zapis) "/"    (:operativnisistem zapis)
+                                                                        )} "Ажурирај"]]
+          ])])))
 
 (defn detalji-is
   [is-id]
@@ -98,7 +154,7 @@
       (generisi-head-naslov (str "Location " is-id))
       (page/include-js "javascript/test1.js")
       heder
-      [:h1 "Информациони систем:"]
+      [:h1 "Информациони системm:"]
       [:p "Ид: " is-id]
       [:p "Назив ИС: " nazivIs]
       [:p "Област: " oblast]
