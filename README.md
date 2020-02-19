@@ -19,8 +19,8 @@ Projekat je pisan u Clojure (Leiningen) korisceno je:
 Ove instrukcije vode do kopiranja projekta na lokalnoj masini i pokretanje aplikacije u "localhost".
 
 ### Neophodan softver za pokretanje
--MYSQL server
--Okruzenje za upravljanje sa Clojure (leiningen)
+*MYSQL server
+*Okruzenje za upravljanje sa Clojure (leiningen)
 
 
 
@@ -28,7 +28,7 @@ Ove instrukcije vode do kopiranja projekta na lokalnoj masini i pokretanje aplik
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Prvi korak je pravljenje baze. Izvrsiti skriptu "baza.sql" koja se nalazi u folderu MySql.
 
 ## Built With
 
