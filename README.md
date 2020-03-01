@@ -14,7 +14,7 @@ Projekat je pisan u Clojure (Leiningen) korisceno je:
 * Jquery - interakcija sa korisnikom
 
 
-## Getting Started
+## Instrukcije
 
 Ove instrukcije vode do kopiranja projekta na lokalnoj masini i pokretanje aplikacije u "localhost".
 
@@ -26,6 +26,8 @@ Ove instrukcije vode do kopiranja projekta na lokalnoj masini i pokretanje aplik
 
 Prvi korak je pravljenje baze. Izvrsiti skriptu "baza.sql" koja se nalazi u folderu MySql.
 Skinuti projekat sa GitHub-a. Ukoliko zelite da promenite parametre pristupa bazi, menjaju se u fajlu
+db.cljr (trenutni kredencijali su "root" "root")
+Nakon pokretanja aplikacije, ukucati adresu u internet pretrazivacu "http://localhost:8006/pocetna"
 
 
 ## Literatura
