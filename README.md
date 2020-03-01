@@ -29,6 +29,9 @@ Skinuti projekat sa GitHub-a. Ukoliko zelite da promenite parametre pristupa baz
 db.cljr (trenutni kredencijali su "root" "root")
 Nakon pokretanja aplikacije, ukucati adresu u internet pretrazivacu "http://localhost:8006/pocetna"
 
+## Demonstracija
+Video  demonstracija rada aplikacije, na sledecem linku:
+https://drive.google.com/file/d/1Gxl7JK6RFX94Qn-LHR4xD6Td90rvIls5/view?usp=sharing
 
 ## Literatura
 
