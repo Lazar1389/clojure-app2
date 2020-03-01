@@ -25,6 +25,8 @@ Ove instrukcije vode do kopiranja projekta na lokalnoj masini i pokretanje aplik
 ## Pokretanje aplikacije
 
 Prvi korak je pravljenje baze. Izvrsiti skriptu "baza.sql" koja se nalazi u folderu MySql.
+Skinuti projekat sa GitHub-a. Ukoliko zelite da promenite parametre pristupa bazi, menjaju se u fajlu
+
 
 ## Literatura
 
